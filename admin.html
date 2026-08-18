@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Content Manager — SLG Services (private)</title>
+
+<link rel="icon" type="image/png" sizes="32x32" href="docs/assets/img/favicon-32.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: { DEFAULT: '#c62b2b', dark: '#9c2020' },
+          cream: '#fbf6ee',
+          ink: '#241a15',
+        },
+        fontFamily: {
+          display: ['"Cormorant Garamond"', 'serif'],
+        },
+      },
+    },
+  };
+</script>
+<link rel="stylesheet" href="docs/assets/css/style.css">
+</head>
+<body class="bg-cream text-ink antialiased">
+
+<header class="border-b border-black/5 bg-white/70">
+  <div class="max-w-4xl mx-auto px-5 py-5 flex items-center gap-3">
+    <img src="docs/assets/img/logo.png" alt="" class="h-10 w-10 object-contain">
+    <div>
+      <p class="font-display text-lg font-semibold leading-tight">Content Manager</p>
+      <p class="text-xs text-ink/50">Private tool — lives outside the docs/ folder, so it's never published to the live site</p>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-5 py-10">
+
+  <!-- ============================= PHOTO GALLERY ============================= -->
+  <h1 class="font-display text-3xl font-semibold mb-6">Photo Gallery</h1>
+
+  <!-- Instructions -->
+  <div class="rounded-2xl bg-white ring-1 ring-black/10 p-6 sm:p-8 mb-8">
+    <h2 class="font-display text-xl font-semibold mb-4">How to add photos to the website</h2>
+    <ol class="space-y-3 text-ink/70 leading-relaxed list-decimal list-inside">
+      <li>Click <strong>Open Website Folder</strong> below and select the <code class="bg-black/5 px-1.5 py-0.5 rounded">docs</code> folder inside this project (the one with <code class="bg-black/5 px-1.5 py-0.5 rounded">index.html</code> directly inside it — not the top-level project folder).</li>
+      <li>Type or pick a category (for example "Farm Lands" or "Plots &amp; Lands"), choose one or more photos, and click <strong>Add Photos</strong>. They save immediately — no separate Save step.</li>
+      <li>Publish the change the same way you normally do (for example, GitHub Desktop → Commit → Push). The photos will appear on the live site a minute or two after that.</li>
+    </ol>
+    <p class="text-sm text-ink/40 mt-4">Photos show on the Gallery page under whichever category you chose, and visitors can filter by category.</p>
+    <p class="text-sm text-ink/40 mt-2">This section needs Chrome or Edge — other browsers can't save photo files directly to the project.</p>
+  </div>
+
+  <!-- Controls -->
+  <div class="rounded-2xl bg-white ring-1 ring-black/10 p-6 sm:p-8 mb-8">
+    <div class="flex flex-wrap items-center gap-3 mb-5">
+      <button id="gallery-open-btn" type="button" class="inline-flex items-center rounded-full bg-ink text-white px-6 py-3 font-medium hover:bg-black transition-colors">
+        Open Website Folder
+      </button>
+    </div>
+    <p id="gallery-status" class="text-sm rounded-xl px-4 py-3 bg-black/5 text-ink/70"></p>
+
+    <div class="mt-6 pt-6 border-t border-black/10 grid sm:grid-cols-[1fr_1fr_auto] gap-3 items-end">
+      <div>
+        <label for="gallery-category-input" class="block text-sm font-medium text-ink/70 mb-1.5">Category</label>
+        <input id="gallery-category-input" type="text" list="gallery-category-list" placeholder="e.g. Farm Lands" class="w-full rounded-xl border border-black/10 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand/40">
+        <datalist id="gallery-category-list"></datalist>
+      </div>
+      <div>
+        <label for="gallery-caption-input" class="block text-sm font-medium text-ink/70 mb-1.5">Caption (optional)</label>
+        <input id="gallery-caption-input" type="text" placeholder="e.g. 2 acre plot, Shamshabad" class="w-full rounded-xl border border-black/10 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand/40">
+      </div>
+      <button id="gallery-add-btn" type="button" disabled class="inline-flex items-center justify-center rounded-full bg-ink/90 text-white px-6 py-2.5 font-medium hover:bg-ink transition-colors disabled:opacity-40 disabled:cursor-not-allowed h-[42px]">
+        Add Photos
+      </button>
+    </div>
+    <div class="mt-3">
+      <label for="gallery-file-input" class="block text-sm font-medium text-ink/70 mb-1.5">Photos</label>
+      <input id="gallery-file-input" type="file" accept="image/*" multiple class="w-full text-sm text-ink/70 file:mr-4 file:rounded-full file:border-0 file:bg-brand file:text-white file:px-4 file:py-2 file:font-medium hover:file:bg-brand-dark file:cursor-pointer">
+    </div>
+  </div>
+
+  <!-- Photo grid -->
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="font-display text-xl font-semibold">Photos (<span id="gallery-count">0</span>)</h3>
+  </div>
+  <div id="gallery-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-16"></div>
+
+  <!-- ============================= VIDEOS ============================= -->
+  <h2 class="font-display text-3xl font-semibold mb-6">Videos</h2>
+
+  <!-- Instructions -->
+  <div class="rounded-2xl bg-white ring-1 ring-black/10 p-6 sm:p-8 mb-8">
+    <h2 class="font-display text-xl font-semibold mb-4">How to add a YouTube video to the website</h2>
+    <ol class="space-y-3 text-ink/70 leading-relaxed list-decimal list-inside">
+      <li>Click <strong>Open videos.json</strong> below and select the <code class="bg-black/5 px-1.5 py-0.5 rounded">videos.json</code> file — it's inside <code class="bg-black/5 px-1.5 py-0.5 rounded">docs/data/</code> in this project.</li>
+      <li>Paste a YouTube video link into the box and click <strong>Add Video</strong>. The title fills in automatically.</li>
+      <li>Click <strong>Save</strong>.</li>
+      <li>Publish the change the same way you normally do (for example, GitHub Desktop → Commit → Push). The video will appear on the live site a minute or two after that.</li>
+    </ol>
+    <p class="text-sm text-ink/40 mt-4">To remove a video, click <strong>Remove</strong> under it, then Save and publish the same way.</p>
+  </div>
+
+  <!-- Controls -->
+  <div class="rounded-2xl bg-white ring-1 ring-black/10 p-6 sm:p-8 mb-8">
+    <div class="flex flex-wrap items-center gap-3 mb-5">
+      <button id="open-btn" type="button" class="inline-flex items-center rounded-full bg-ink text-white px-6 py-3 font-medium hover:bg-black transition-colors">
+        Open videos.json
+      </button>
+      <button id="save-btn" type="button" disabled class="inline-flex items-center rounded-full bg-brand text-white px-6 py-3 font-medium hover:bg-brand-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+        Save
+      </button>
+      <input id="classic-input" type="file" accept="application/json" class="hidden">
+    </div>
+    <p id="status" class="text-sm rounded-xl px-4 py-3 bg-black/5 text-ink/70"></p>
+
+    <div class="mt-6 pt-6 border-t border-black/10 grid sm:grid-cols-[1fr_auto] gap-3 items-end">
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label for="url-input" class="block text-sm font-medium text-ink/70 mb-1.5">YouTube link</label>
+          <input id="url-input" type="text" placeholder="https://www.youtube.com/watch?v=..." class="w-full rounded-xl border border-black/10 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand/40">
+        </div>
+        <div>
+          <label for="title-input" class="block text-sm font-medium text-ink/70 mb-1.5">Title (optional)</label>
+          <input id="title-input" type="text" placeholder="Leave blank to fetch automatically" class="w-full rounded-xl border border-black/10 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand/40">
+        </div>
+      </div>
+      <button id="add-btn" type="button" disabled class="inline-flex items-center justify-center rounded-full bg-ink/90 text-white px-6 py-2.5 font-medium hover:bg-ink transition-colors disabled:opacity-40 disabled:cursor-not-allowed h-[42px]">
+        Add Video
+      </button>
+    </div>
+  </div>
+
+  <!-- Video list -->
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="font-display text-xl font-semibold">Videos (<span id="video-count">0</span>)</h2>
+  </div>
+  <div id="video-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+  <p class="text-center mt-12">
+    <a href="docs/index.html" class="text-sm text-ink/40 hover:text-brand transition-colors">&larr; Back to the website</a>
+  </p>
+
+</main>
+
+<script src="admin-assets/js/admin-gallery.js"></script>
+<script src="admin-assets/js/admin.js"></script>
+</body>
+</html>

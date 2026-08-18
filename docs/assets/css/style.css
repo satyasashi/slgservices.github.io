@@ -1,0 +1,180 @@
+/* ============================================================
+   SLG Services — custom styles
+   Tailwind (CDN) handles layout/utility classes. This file only
+   holds things Tailwind utilities can't express: fonts, the
+   yantra background motif, custom animations, and a couple of
+   hand-built components.
+   ============================================================ */
+
+:root {
+  --brand-red: #c62b2b;
+  --brand-red-dark: #9c2020;
+  --cream: #fbf6ee;
+  --ink: #241a15;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  background-color: var(--cream);
+  color: var(--ink);
+}
+
+.font-display {
+  font-family: "Cormorant Garamond", "Georgia", serif;
+}
+
+/* Subtle repeating yantra-triangle watermark used on section backgrounds */
+.yantra-bg {
+  position: relative;
+  isolation: isolate;
+}
+
+.yantra-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.05;
+  background-image: url("../img/logo.png");
+  background-repeat: no-repeat;
+  background-position: 105% -10%;
+  background-size: 480px;
+  pointer-events: none;
+}
+
+/* Petal-gradient underline used behind key headings */
+.petal-underline {
+  display: inline-block;
+  position: relative;
+}
+
+.petal-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.35em;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    #f2b234,
+    #ef7f3a,
+    #e8368f,
+    #8b4fc9,
+    #2f7fdb,
+    #16a6a0,
+    #7cb93a
+  );
+}
+
+/* Fade/rise-in on scroll */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Mobile nav panel */
+#mobile-nav {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+#mobile-nav.open {
+  max-height: 480px;
+}
+
+/* Video embed keeps a 16:9 ratio without extra markup */
+.video-frame {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #1a1210;
+}
+
+.video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Gallery album cover — a photo with up to two others peeking out behind it
+   to read as a stack. Layers overlap outside the front card's own box, so
+   the grid needs enough gap to give them room (see .gap-x-8/.gap-y-10 in
+   gallery.js when the album view is active). */
+.photo-stack {
+  position: relative;
+}
+
+.stack-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 0 0 4px #fff, 0 6px 16px rgba(36, 26, 21, 0.16);
+  background: #fff;
+}
+
+.stack-layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.stack-back-2 {
+  transform: rotate(8deg) translate(16px, 12px) scale(0.94);
+  z-index: 1;
+}
+
+.stack-back-1 {
+  transform: rotate(-6deg) translate(10px, 9px) scale(0.97);
+  z-index: 2;
+}
+
+.stack-front {
+  z-index: 3;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.album-card:hover .stack-front,
+.album-card:focus-visible .stack-front {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 28px rgba(36, 26, 21, 0.2);
+}
+
+.album-card:hover h3,
+.album-card:focus-visible h3 {
+  color: var(--brand-red);
+}
+
+/* Skip link, visible only on keyboard focus */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--brand-red);
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 0 0.5rem 0;
+}
+
+.skip-link:focus {
+  left: 0;
+}
