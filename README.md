@@ -45,6 +45,42 @@ live at the usual URL, and there is no public URL for `admin.html` at all —
 visiting `.../admin.html` on the live domain 404s, because that file was
 never published.
 
+## Custom domain: slgservice.com
+
+The site is configured to serve from **slgservice.com** (with `www.slgservice.com`
+redirecting to it) instead of the default `github.io` URL. This needs two things:
+a `CNAME` file in the repo (already added, at `docs/CNAME`, containing exactly
+`slgservice.com`) and DNS records at wherever the domain was purchased
+(GoDaddy, Namecheap, Google Domains, etc. — look for "DNS" or "DNS Management"
+in that account).
+
+Add these DNS records:
+
+| Type  | Host / Name      | Value                  |
+|-------|------------------|------------------------|
+| A     | @ (or blank)     | 185.199.108.153        |
+| A     | @ (or blank)     | 185.199.109.153        |
+| A     | @ (or blank)     | 185.199.110.153        |
+| A     | @ (or blank)     | 185.199.111.153        |
+| CNAME | www              | satyasashi.github.io   |
+
+("@" or a blank host field both mean "the domain itself, no subdomain" — the
+exact label depends on the registrar.) All four A records are needed; most
+registrars let you add each as a separate row with the same host.
+
+Then on GitHub: repo → **Settings → Pages** → "Custom domain" → enter
+`slgservice.com` → Save. GitHub will check the DNS and, once it's found,
+offer a checkbox to **Enforce HTTPS** — turn that on once it's available (it
+stays greyed out until GitHub finishes issuing a certificate for the domain).
+
+DNS changes can take anywhere from a few minutes to about 48 hours to take
+effect, depending on the registrar — if `slgservice.com` doesn't load right
+away, that's normal; try again later. Until then, the `github.io` URL keeps
+working as a fallback.
+
+If you ever want to switch back to the default URL, delete `docs/CNAME` and
+clear the custom domain field in Pages settings.
+
 ## Admin access — how "only Dad can upload content" actually works
 
 `admin.html` can't push changes to the live site by itself — it only writes
